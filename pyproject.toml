@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "decoy_analysis"
+version = "0.1.0"
+description = ""
+authors = ["MichaelJamesStam <michaelstam@protonmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "^1.20.2"
+pandas = "^1.2.4"
+scikit-learn = "^0.24.1"
+AMPAL = "^1.4.0"
+matplotlib = "^3.4.1"
+seaborn = "^0.11.1"
+
+[tool.poetry.dev-dependencies]
+black = {version = "^20.8b1", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
