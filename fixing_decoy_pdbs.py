@@ -1,18 +1,23 @@
-# The 3DRobot Decoy set is used for the DE-STRESS decoy analysis. However, all of the PDB files for the decoy files
-# are not valid pdb files. This script fixes the pdb files so that we can use them in DE-STRESS.
+# The 3DRobot Decoy set is used for the DE-STRESS decoy analysis.
+# However, the decoy PDB files had the element column missing and
+# some of the native structures contained hydrogen atoms, which
+# cause issues for a lot of the metrics that DE-STRESS runs.
+# This script fixes the pdb files so that we can use them in DE-STRESS.
 
 # Loading packages
 import ampal
 import os
+import pathlib
 
-# Setting the DECOY_DATA_FOLDER_PATH from the .env file
-DECOY_DATA_FOLDER_PATH = os.getenv("DECOY_DATA_FOLDER_PATH")
+# Defining the data path (the downloaded 3DRobot_set should be
+# saved in the data folder).
+data_3drobot_set = pathlib.Path("data/3DRobot_set/")
 
 # Listing all the sub dirs in the 3DRobot Decoy Data
-subdirs = [x[0] for x in os.walk(DECOY_DATA_FOLDER_PATH)]
+subdirs = [x[0] for x in os.walk(data_3drobot_set)]
 
 # Removing the DECOY_DATA_FOLDER_PATH from this list
-subdirs[:] = [d for d in subdirs if d not in [DECOY_DATA_FOLDER_PATH]]
+subdirs[:] = [d for d in subdirs if d not in ["data/3DRobot_set"]]
 print(subdirs)
 
 # Printing how many directories the script will run for
@@ -27,6 +32,15 @@ for subdir in subdirs:
 
     # Loading the native structure
     native_structure = ampal.load_pdb(subdir + "/" + "native.pdb")
+
+    # Deleting hydrogen atoms
+    for residue in native_structure.get_monomers():
+        del_keys = []
+        for (k, v) in residue.atoms.items():
+            if v.element == "H":
+                del_keys.append(k)
+        for k in del_keys:
+            del residue.atoms[k]
 
     # Renaming the native pdb file to include the pdb id and saving it
     with open(subdir + "/" + subdir_name + "_native.pdb", "w") as outf:
