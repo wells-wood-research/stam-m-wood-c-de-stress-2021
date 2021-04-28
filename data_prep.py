@@ -18,6 +18,8 @@ file_name_list = [
     f
     for f in os.listdir(destress_output)
     if os.path.isfile(os.path.join(destress_output, f))
+    and f.endswith(".csv")
+    and f != "combined_data.csv"
 ]
 
 # Looping through the de-stress output files
