@@ -1,0 +1,11 @@
+,0
+composition: ALA,0.2557894744864987
+rosetta - fa_atr,0.24434190080388327
+budeff: desolvation,0.24367310430484843
+rosetta - fa_sol,0.241211857615767
+dfire2 - total,0.23050350757803453
+budeff: total,0.22634861395638314
+rosetta - fa_intra_sol_xover4,0.2246849682545381
+budeff: charge,0.22239887045881945
+composition: THR,0.20873231366416004
+rosetta - hbond_sr_bb,0.2048894211064836
