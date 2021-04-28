@@ -4,10 +4,12 @@
 # cause issues for a lot of the metrics that DE-STRESS runs.
 # This script fixes the pdb files so that we can use them in DE-STRESS.
 
-# Loading packages
+# 0. Loading packages---------------------------------------------------
 import ampal
 import os
 import pathlib
+
+# 1. Lising all the subdirectories to fix-------------------------------
 
 # Defining the data path (the downloaded 3DRobot_set should be
 # saved in the data folder).
@@ -22,6 +24,8 @@ print(subdirs)
 
 # Printing how many directories the script will run for
 print("Fixing the pdb files for " + str(len(subdirs)) + " directories")
+
+# 2. Looping through the sub directories and fixing the pdb files----------
 
 # Looping through all the sub directories
 for subdir in subdirs:
