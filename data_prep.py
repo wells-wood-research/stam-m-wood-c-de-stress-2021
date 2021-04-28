@@ -1,5 +1,5 @@
-# This script reads in csv files of DE-STRESS output data, combines them and removes fields that
-# are not needed for analysis
+# This script reads in csv files of DE-STRESS output data,
+# combines them and removes fields that are not needed for analysis.
 
 # 0. Loading the releavnt packages-----------------------------------
 
@@ -10,14 +10,14 @@ import pandas as pd
 
 # 1. Loading csv files and appending them all together---------------
 
-# Defining the data path
-DESTRESS_OUTPUT_PATH = os.getenv("DESTRESS_OUTPUT_PATH")
+# Setting the file paths
+destress_output = "de-stress_output/"
 
 # Listing all the files in this folder
 file_name_list = [
     f
-    for f in os.listdir(DESTRESS_OUTPUT_PATH)
-    if os.path.isfile(os.path.join(DESTRESS_OUTPUT_PATH, f))
+    for f in os.listdir(destress_output)
+    if os.path.isfile(os.path.join(destress_output, f))
 ]
 
 # Looping through the de-stress output files
@@ -27,13 +27,13 @@ for i, file_name in enumerate(file_name_list):
     # combined_data
     if i == 0:
         # Reading the csv file using pandas
-        combined_data = pd.read_csv(DESTRESS_OUTPUT_PATH + file_name)
+        combined_data = pd.read_csv(destress_output + file_name)
 
     # For the other files we read them in and then append
     # them to combined_data
     else:
         # Reading the csv file using pandas
-        data = pd.read_csv(DESTRESS_OUTPUT_PATH + file_name)
+        data = pd.read_csv(destress_output + file_name)
 
         # Appending the data together
         combined_data = combined_data.append(data, ignore_index=True)
@@ -54,10 +54,7 @@ combined_data["decoy or native"] = np.where(
 # Creating a column to indicate the pdb id
 combined_data["pdb id"] = combined_data["design name"].str.split(pat="_").str[0]
 
-# print(combined_data["number of residues"].unique())
-# print(combined_data["mass (da)"].unique())
-
 # 3. Saving data--------------------------------------------------------------
 
 # Outputting the pandas data frame as a csv file
-combined_data.to_csv(DESTRESS_OUTPUT_PATH + "combined_data.csv", index=False)
+combined_data.to_csv(destress_output + "combined_data.csv", index=False)
