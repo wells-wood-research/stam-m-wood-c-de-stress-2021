@@ -59,7 +59,7 @@ plt.close()
 # 2. Performing PCA and plotting components
 # against variance with two different scaling methods---------------------------------------------------
 n_components = [2, 3, 4, 5, 6, 7, 8, 9, 10]
-scaling_method = ["stand", "minmax"]
+scaling_method = ["minmax"]
 
 # Creating a data frame to collect results
 var_explained_df = pd.DataFrame(
@@ -176,6 +176,6 @@ plt.ylabel("PCA Component 2")
 h, l = plot.get_legend_handles_labels()
 plt.legend(h[1:11], l[1:11], loc="best", ncol=3, handletextpad=0.1)
 plt.savefig(
-    analysis_output + "pca_2dproj.svg",
+    analysis_output + "pca_2dproj.png",
     bbox_inches="tight",
 )
