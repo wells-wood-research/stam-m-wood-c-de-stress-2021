@@ -78,11 +78,23 @@ plot below.
 
 Firstly, we checked the variance explained by different numbers of PCA components. The chart below
 shows that the first 2 principal components explain over 50% of the variance in the data set, and
-roughly 90% of the variance is explained with 8 principal components. 
+roughly 90% of the variance is explained with 8 principal components.
 
 [<img src=./analysis/var_explained.png>]()
 
-For the first 2 principal components, 
+After this, we plotted the first two principal components for all 10 of the 
+experimentally-determined structures along with their decoys. The plot below is the one
+that is used in the DE-STRESS paper. 
+
+[<img src=./analysis/pca_2dproj.png>]()
+
+This plot shows that the experimentally-determined structures and their decoys form clusters, and
+that the experimentally-determined structures shown by the stars, were close to, 
+but distinct from, the main cluster of structures. These results show that the metrics included in 
+the DE-STRESS web server could be used to automatically identify high-quality structure models 
+using machine learning.
+
+
 
 
 
