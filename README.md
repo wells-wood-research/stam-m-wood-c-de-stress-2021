@@ -63,17 +63,30 @@ This data set was then saved as `de-stress_output/combined_data.csv`.
 
 ## Principal Component Analysis (PCA)
 
-### Scaling the features
+### Feature Scaling
 
 Before performing PCA on the `de-stress_output/combined_data.csv`, we scaled the features so that
 the values were between 0 and 1. This is because PCA is extremely sensitive to the magnitude of
 the values and higher magnitude features (e.g energy function values) could skew the analysis. We
 chose to normalise the features with min-max scaling rather than using standardisation, as some of
-the features did not look like they had a Gaussian distribution. An example of this is shown in the 
-plot below:
-
+the features didn't appear to have a Gaussian distribution. An example of this is shown in the 
+plot below.
 
 [<img src=./analysis/hist_dfire2.png>]()
+
+### Performing PCA
+
+Firstly, we checked the variance explained by different numbers of PCA components. The chart below
+shows that the first 2 principal components explain over 50% of the variance in the data set, and
+roughly 90% of the variance is explained with 8 principal components. 
+
+[<img src=./analysis/var_explained.png>]()
+
+For the first 2 principal components, 
+
+
+
+
 
 
 
