@@ -41,6 +41,21 @@ combined_data.drop(
     inplace=True,
 )
 
+# 2. Histograms of the features------------------------------------------------------------------------
+
+combined_data["dfire2 - total"].plot.hist(
+    grid=True, bins=50, rwidth=0.9, color="#87ceeb"
+)
+plt.title("Histogram of the dfire2 - total metric values")
+plt.xlabel("dfire2 - total")
+plt.ylabel("counts")
+plt.savefig(
+    analysis_output + "hist_dfire2.png",
+    bbox_inches="tight",
+)
+plt.close()
+
+
 # 2. Performing PCA and plotting components
 # against variance with two different scaling methods---------------------------------------------------
 n_components = [2, 3, 4, 5, 6, 7, 8, 9, 10]
