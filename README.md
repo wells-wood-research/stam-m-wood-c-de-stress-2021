@@ -72,7 +72,8 @@ chose to normalise the features with min-max scaling rather than using standardi
 the features did not look like they had a Gaussian distribution. An example of this is shown in the 
 plot below:
 
-![](./analysis/hist_dfire2.png)
+
+[<img src=./analysis/hist_dfire2.png>]()
 
 
 
