@@ -35,6 +35,7 @@ combined_data.drop(
         "decoy or native",
         "evoef2 - interD total",
         "rosetta - yhh_planarity",
+        "composition: UNK",
         "pdb id",
     ],
     axis=1,
@@ -106,6 +107,7 @@ plot = sns.lineplot(
     hue="scaling_method",
 )
 plt.title("""Variance explained by number of pca components and scaling method.""")
+plt.xlabel("Number of components")
 plt.legend(loc="upper right", ncol=2, handletextpad=0.1)
 plt.savefig(analysis_output + "var_explained.png")
 plt.close()
