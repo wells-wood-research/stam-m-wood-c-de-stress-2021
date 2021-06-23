@@ -1,11 +1,21 @@
 ,1
-composition: GLU,0.35251027560163717
-composition: VAL,0.26790173625307473
-composition: ARG,0.2658336125865034
-composition: LYS,0.2559179600345928
-rosetta - hbond_lr_bb,0.23910859936048703
-composition: TYR,0.23665107814566824
-isoelectric point (pH),0.233825250921899
-composition: HIS,0.22550750992213725
-composition: THR,0.20879774919705643
-composition: PRO,0.20546147787684682
+rosetta - hbond_lr_bb,0.33813136375931363
+aggrescan3d: total_value,0.2817617713479675
+aggrescan3d: avg_value,0.2755678272047453
+rosetta - rama_prepro,0.2670741236402094
+rosetta - hbond_sr_bb,0.2614133170842338
+rosetta - omega,0.25918300994525467
+aggrescan3d: max_value,0.24058908175876617
+rosetta - total,0.21800583120636563
+evoef2: intraR total,0.19896717031626338
+rosetta - pro_close,0.18479098250774822
+aggrescan3d: min_value,0.18244901514166523
+evoef2: total,0.18208289397113045
+isoelectric point (pH),0.18160797319780628
+rosetta - p_aa_pp,0.17967430849733657
+budeff: charge,0.15911723859607058
+rosetta - hbond_sc,0.15700658477841387
+rosetta - fa_dun,0.15509840799815147
+hydrophobic fitness,0.14472745233742623
+rosetta - fa_rep,0.14287935753943745
+rosetta - lk_ball_wtd,0.13809476740139462
