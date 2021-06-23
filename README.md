@@ -97,11 +97,44 @@ experimentally-determined structures along with their decoys, in separate plots.
 
 [<img src=./analysis/pca_2dproj_subplots.png>]()
 
-This plot shows that the experimentally-determined structures and their decoys form clusters, and
-that the experimentally-determined structures shown by the stars, were close to, 
-but distinct from, the main cluster of structures. These results show that the metrics included in 
-the DE-STRESS web server could be used to automatically identify high-quality structure models 
-using machine learning.
+From this plot, we see that for each `pdb id`, the native structure consistently has the maximum value
+for principal component 2 compared to the decoy structures for the same `pdb id`. Based on this observation, 
+we plotted principal component 2 for each `pdb id` on the same chart, with the circles representing the 
+decoy structures and the stars representing the native structures. 
+
+[<img src=./analysis/strip_plot.png>]()
+
+The plot above shows that the native structures have the maximum value for principal component 2 across all 
+the different structures, and shows that the DE-STRESS metrics are able to consistently separate out the native 
+structures from the decoys. This plot is included in the updated DE-STRESS paper.  
+
+Furthermore, we investigated what features contributed to principal component 2 and the top 10 features, ordered
+by relative contribution are shown below. 
+
+1. `rosetta - hbond_lr_bb`
+2. `aggrescan3d: total_value`
+3. `aggrescan3d: avg_value`
+4. `rosetta - rama_prepro`
+5. `rosetta - hbond_sr_bb`
+6. `rosetta - omega`
+7. `aggrescan3d: max_value`
+8. `rosetta - total`
+9. `evoef2: intraR total`
+10. `rosetta - pro_close`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
