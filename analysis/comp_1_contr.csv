@@ -9,13 +9,3 @@ budeff: charge,0.2683973861506821
 rosetta - hbond_sr_bb,0.24509325011017127
 evoef2: ref total,0.23608043614691832
 evoef2: intraR total,0.22416994941866622
-budeff: steric,0.18626561496789673
-rosetta - fa_dun,0.1824039574418049
-rosetta - fa_rep,0.16280270103174474
-rosetta - total,0.15764455807925842
-rosetta - fa_elec,0.1511379558364238
-rosetta - pro_close,0.1460326856242648
-packing density,0.14222434217726482
-evoef2: interS total,0.13623582587675703
-rosetta - fa_intra_rep,0.12790852915097833
-rosetta - lk_ball_wtd,0.1055100990177419
