@@ -4,14 +4,13 @@
 # 0. Loading the relevant packages-------------------------------------------
 
 # Loading relevant packages
-import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import sklearn
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn import decomposition
+
 
 # 1. Reading in the data and preprocessing-----------------------------------
 
@@ -35,12 +34,21 @@ combined_data.drop(
         "decoy or native",
         "evoef2 - interD total",
         "rosetta - yhh_planarity",
-        "composition: UNK",
         "pdb id",
     ],
     axis=1,
     inplace=True,
 )
+
+# Dropping composition metrics as these only change across different pdb ids
+# and not natives vs decoy structures. This is important as we are interested
+# in looking at metrics that separate out decoys vs native structures. If these
+# values are included they dominate the variance in the data set as each structure
+# has a different amino acid composition.
+combined_data = combined_data.loc[
+    :, ~combined_data.columns.str.startswith("composition")
+]
+
 
 # 2. Histograms of the features------------------------------------------------------------------------
 
@@ -129,7 +137,7 @@ pca.fit(scaled_data_df)
 
 # Saving contributions of the features to the principal components
 feat_contr_to_cmpts = pd.DataFrame(abs(pca.components_), columns=combined_data.columns)
-feat_contr_to_cmpts.to_csv(analysis_output + "feat_contr_to_cmpts.csv", index=False)
+feat_contr_to_cmpts.to_csv(analysis_output + "feat_contr_to_cmpts.csv", index=True)
 
 # Selecting the 10 largest contributers to pca component 1
 comp_1_contr = feat_contr_to_cmpts.iloc[0].nlargest(10, keep="first")
@@ -150,7 +158,8 @@ transformed_data = pd.DataFrame(transformed_data).rename(
 # Adding the labels back
 transformed_data = pd.concat([transformed_data, decoy_or_native, pdb_id], axis=1)
 
-# Plotting and saving the figure
+
+# Scatter plot of all PCA component 1 and PCA component 2 for all structures
 plot = sns.scatterplot(
     x="pca_dim0",
     y="pca_dim1",
@@ -181,3 +190,65 @@ plt.savefig(
     analysis_output + "pca_2dproj.png",
     bbox_inches="tight",
 )
+plt.close()
+
+
+# Individual scatter plots for each structure
+sns.set(font_scale=1.5)
+rel_plot = sns.relplot(
+    data=transformed_data,
+    x="pca_dim0",
+    y="pca_dim1",
+    col="pdb id",
+    col_wrap=3,
+    hue="decoy or native",
+    facet_kws={
+        "sharey": False,
+        "sharex": False,
+    },
+    s=200,
+    legend=False,
+)
+rel_plot.set_axis_labels("PCA Component 1", "PCA Component 2")
+plt.savefig(
+    analysis_output + "pca_2dproj_subplots.png",
+    bbox_inches="tight",
+)
+plt.close()
+
+# Strip plot of PCA component 2 for all structures
+# split out by decoy or native structure
+sns.set(style="whitegrid")
+strip_plot1 = sns.stripplot(
+    x="pdb id",
+    y="pca_dim1",
+    data=transformed_data[transformed_data["decoy or native"] == "decoy"],
+    hue=decoy_or_native,
+    edgecolor="black",
+    alpha=0.7,
+    jitter=True,
+    linewidth=1,
+    marker="o",
+    s=6,
+)
+strip_plot1.legend_.remove()
+strip_plot2 = sns.stripplot(
+    x="pdb id",
+    y="pca_dim1",
+    data=transformed_data[transformed_data["decoy or native"] == "native"],
+    hue=decoy_or_native,
+    edgecolor="black",
+    alpha=0.7,
+    jitter=True,
+    linewidth=1,
+    marker="*",
+    s=10,
+)
+strip_plot2.legend_.remove()
+plt.xlabel("PDB ID")
+plt.ylabel("PCA Component 2")
+plt.savefig(
+    analysis_output + "strip_plot.png",
+    bbox_inches="tight",
+)
+plt.close()
