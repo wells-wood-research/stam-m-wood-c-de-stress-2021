@@ -63,30 +63,39 @@ This data set was then saved as `de-stress_output/combined_data.csv`.
 
 ## Principal Component Analysis (PCA)
 
-### Feature Scaling
+### Feature Selection and Scaling
 
-Before performing PCA on the `de-stress_output/combined_data.csv`, we scaled the features so that
-the values were between 0 and 1. This is because PCA is extremely sensitive to the magnitude of
-the values and higher magnitude features (e.g energy function values) could skew the analysis. We
-chose to normalise the features with min-max scaling rather than using standardisation, as some of
-the features didn't appear to have a Gaussian distribution. An example of this is shown in the 
-plot below.
+Firstly, before performing PCA we removed the amino acid composition features such as `composition_ALA`. 
+This is because these metrics are constant for the decoys and native structures of one `pdb_id` and only 
+change across the different structures. In this analysis, we are interested in features that can distinguish 
+between the decoys and native structures, so that's why these metrics were excluded. Other metrics that were
+excluded were `design name` and `pdb_id` as these are categorical features, `number of residues` and `mass (da)` 
+as similarly to the composition metrics, these don't distinguish between decoys and native structures, 
+`evoef2 - interD total` and `rosetta - yhh_planarity` as these were constant across the data set, and 
+obviously `decoy or native` as we are interested in seeing if the DE-STRESS features can separate decoys and
+native structures out themselves.
+ 
+
+After this, we scaled the remaining features so that the values were between 0 and 1. 
+This is because PCA is extremely sensitive to the magnitude of the values and higher magnitude features 
+(e.g energy function values) could skew the analysis. We chose to normalise the features with min-max scaling 
+rather than using standardisation, as some of the features didn't appear to have a Gaussian distribution. 
+An example of this is shown in the plot below.
 
 [<img src=./analysis/hist_dfire2.png>]()
 
 ### Performing PCA
 
 Firstly, we checked the variance explained by different numbers of PCA components. The chart below
-shows that the first 2 principal components explain over 50% of the variance in the data set, and
-roughly 90% of the variance is explained with 8 principal components.
+shows that the first 2 principal components explain roughly 67% of the variance in the data set, and
+roughly 90% of the variance is explained with 6 principal components.
 
 [<img src=./analysis/var_explained.png>]()
 
 After this, we plotted the first two principal components for all 10 of the 
-experimentally-determined structures along with their decoys. The plot below is the one
-that is used in the DE-STRESS paper. 
+experimentally-determined structures along with their decoys, in separate plots. 
 
-[<img src=./analysis/pca_2dproj.png>]()
+[<img src=./analysis/pca_2dproj_subplots.png>]()
 
 This plot shows that the experimentally-determined structures and their decoys form clusters, and
 that the experimentally-determined structures shown by the stars, were close to, 
