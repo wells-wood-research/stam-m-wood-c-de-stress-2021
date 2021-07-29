@@ -1,11 +1,11 @@
 ,0
-rosetta - fa_atr,0.2932642217947465
-rosetta - fa_sol,0.29308773002370725
-budeff: desolvation,0.29161804123165325
-dfire2 - total,0.2749224737305675
-budeff: total,0.27116788851232443
-rosetta - fa_intra_sol_xover4,0.2711072958010786
-budeff: charge,0.2683973861506821
-rosetta - hbond_sr_bb,0.24509325011017127
-evoef2: ref total,0.23608043614691832
-evoef2: intraR total,0.22416994941866622
+budeff: total,0.3055
+rosetta - hbond_sr_bb,0.3049
+rosetta - hbond_lr_bb,0.2776
+budeff: charge,0.2507
+evoef2: intraR total,0.2459
+dfire2 - total,0.2367
+rosetta - fa_sol,0.2256
+rosetta - fa_atr,0.2169
+rosetta - rama_prepro,0.2062
+evoef2: total,0.1971

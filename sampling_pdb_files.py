@@ -25,7 +25,7 @@ random.seed(42)
 num_structures = 10
 
 # Setting the number of decoys
-num_decoys = 20
+num_decoys = 40
 
 # 2. Creating the subset data----------------------------------------------------
 

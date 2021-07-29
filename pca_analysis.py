@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn import decomposition
+from scipy.stats import multivariate_normal
+from helper_functions import *
 
 
 # 1. Reading in the data and preprocessing-----------------------------------
@@ -25,6 +27,80 @@ combined_data = pd.read_csv(destress_output + "combined_data.csv")
 decoy_or_native = combined_data["decoy or native"]
 pdb_id = combined_data["pdb id"].str.slice(start=0, stop=4)
 
+# Dividing energy values by number of residues
+combined_data.loc[
+    :,
+    [
+        "hydrophobic fitness",
+        "budeff: total",
+        "budeff: steric",
+        "budeff: desolvation",
+        "budeff: charge",
+        "evoef2: total",
+        "evoef2: ref total",
+        "evoef2: intraR total",
+        "evoef2: interS total",
+        "evoef2 - interD total",
+        "dfire2 - total",
+        "rosetta - total",
+        "rosetta - fa_atr",
+        "rosetta - fa_rep",
+        "rosetta - fa_intra_rep",
+        "rosetta - fa_elec",
+        "rosetta - fa_sol",
+        "rosetta - lk_ball_wtd",
+        "rosetta - fa_intra_sol_xover4",
+        "rosetta - hbond_lr_bb",
+        "rosetta - hbond_sr_bb",
+        "rosetta - hbond_bb_sc",
+        "rosetta - hbond_sc",
+        "rosetta - dslf_fa13",
+        "rosetta - rama_prepro",
+        "rosetta - p_aa_pp",
+        "rosetta - fa_dun",
+        "rosetta - omega",
+        "rosetta - pro_close",
+        "rosetta - yhh_planarity",
+    ],
+] = combined_data.loc[
+    :,
+    [
+        "hydrophobic fitness",
+        "budeff: total",
+        "budeff: steric",
+        "budeff: desolvation",
+        "budeff: charge",
+        "evoef2: total",
+        "evoef2: ref total",
+        "evoef2: intraR total",
+        "evoef2: interS total",
+        "evoef2 - interD total",
+        "dfire2 - total",
+        "rosetta - total",
+        "rosetta - fa_atr",
+        "rosetta - fa_rep",
+        "rosetta - fa_intra_rep",
+        "rosetta - fa_elec",
+        "rosetta - fa_sol",
+        "rosetta - lk_ball_wtd",
+        "rosetta - fa_intra_sol_xover4",
+        "rosetta - hbond_lr_bb",
+        "rosetta - hbond_sr_bb",
+        "rosetta - hbond_bb_sc",
+        "rosetta - hbond_sc",
+        "rosetta - dslf_fa13",
+        "rosetta - rama_prepro",
+        "rosetta - p_aa_pp",
+        "rosetta - fa_dun",
+        "rosetta - omega",
+        "rosetta - pro_close",
+        "rosetta - yhh_planarity",
+    ],
+].div(
+    combined_data["number of residues"], axis=0
+)
+
+
 # Dropping some columns
 combined_data.drop(
     [
@@ -34,11 +110,14 @@ combined_data.drop(
         "decoy or native",
         "evoef2 - interD total",
         "rosetta - yhh_planarity",
+        "aggrescan3d: total_value",
+        "isoelectric point (pH)",
         "pdb id",
     ],
     axis=1,
     inplace=True,
 )
+
 
 # Dropping composition metrics as these only change across different pdb ids
 # and not natives vs decoy structures. This is important as we are interested
@@ -52,20 +131,21 @@ combined_data = combined_data.loc[
 
 # 2. Histograms of the features------------------------------------------------------------------------
 
-combined_data["dfire2 - total"].plot.hist(
+combined_data["rosetta - pro_close"].plot.hist(
     grid=True, bins=50, rwidth=0.9, color="#87ceeb"
 )
-plt.title("Histogram of the dfire2 - total metric values")
-plt.xlabel("dfire2 - total")
+plt.title("Histogram of the rosetta - pro_close metric values")
+# plt.xlabel("dfire2 - total")
+plt.xlabel("rosetta - pro_close")
 plt.ylabel("counts")
 plt.savefig(
-    analysis_output + "hist_dfire2.png",
+    analysis_output + "hist_rosetta_pro_close.png",
     bbox_inches="tight",
 )
 plt.close()
 
 
-# 2. Performing PCA and plotting components
+# 3. Performing PCA and plotting components
 # against variance with two different scaling methods---------------------------------------------------
 n_components = [2, 3, 4, 5, 6, 7, 8, 9, 10]
 scaling_method = ["minmax"]
@@ -108,7 +188,7 @@ for i in n_components:
 var_explained_df.to_csv(analysis_output + "var_explained.csv", index=False)
 
 # Plotting the data and saving
-plot = sns.lineplot(
+var_plot = sns.lineplot(
     x="n_components",
     y="var_explained",
     data=var_explained_df,
@@ -121,7 +201,33 @@ plt.savefig(analysis_output + "var_explained.png")
 plt.close()
 
 
-# 3. Performing PCA with 2 components and plotting against different labels
+fig, (ax1, ax2) = plt.subplots(2, 1)
+fig.set_size_inches(6, 7)
+
+combined_data["dfire2 - total"].plot.hist(
+    grid=True, bins=50, rwidth=0.9, color="#87ceeb", ax=ax1
+)
+ax1.set_xlabel("DFIRE2 - Total")
+ax1.set_ylabel("Counts")
+
+var_plot = sns.lineplot(
+    x="n_components",
+    y="var_explained",
+    data=var_explained_df,
+    hue="scaling_method",
+    ax=ax2,
+    legend=False,
+)
+ax2.set_xlabel("Number of Components")
+ax2.set_ylabel("Variance Explained")
+plt.savefig(
+    analysis_output + "hist_dfire2_var_explained.png",
+    dpi=600,
+)
+plt.close()
+
+
+# 4. Performing PCA with 2 components and plotting against different labels
 
 # Normalising the data with min max transform as not all the
 # features will have a gaussian distribution
@@ -136,7 +242,9 @@ pca = decomposition.PCA(n_components=2)
 pca.fit(scaled_data_df)
 
 # Saving contributions of the features to the principal components
-feat_contr_to_cmpts = pd.DataFrame(abs(pca.components_), columns=combined_data.columns)
+feat_contr_to_cmpts = pd.DataFrame(
+    np.round(abs(pca.components_), 4), columns=combined_data.columns
+)
 feat_contr_to_cmpts.to_csv(analysis_output + "feat_contr_to_cmpts.csv", index=True)
 
 # Selecting the 10 largest contributers to pca component 1
@@ -158,6 +266,10 @@ transformed_data = pd.DataFrame(transformed_data).rename(
 # Adding the labels back
 transformed_data = pd.concat([transformed_data, decoy_or_native, pdb_id], axis=1)
 
+# 5. Fitting 2d Gaussians to each of the sets of decoy structures by pdb id----------------------------
+
+
+# 6. Various different plots for paper and report---------------------------------------
 
 # Scatter plot of all PCA component 1 and PCA component 2 for all structures
 plot = sns.scatterplot(
@@ -182,43 +294,64 @@ plot = sns.scatterplot(
     markers=["o", "*"],
     sizes=[50, 150],
 )
-plt.xlabel("PCA Component 1")
-plt.ylabel("PCA Component 2")
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
 h, l = plot.get_legend_handles_labels()
-plt.legend(h[1:11], l[1:11], loc="best", ncol=3, handletextpad=0.1)
-plt.savefig(
-    analysis_output + "pca_2dproj.png",
-    bbox_inches="tight",
-)
+plt.legend(h[1:11], l[1:11], bbox_to_anchor=(1.05, 1), loc="upper left")
+plt.savefig(analysis_output + "pca_2dproj.png", bbox_inches="tight", dpi=600)
+plt.savefig(analysis_output + "pca_2dproj.svg", bbox_inches="tight", dpi=600)
 plt.close()
 
 
-# Individual scatter plots for each structure
+# Individual scatter plots for each structure with
+# 2d Gaussian standard deviation elipses
 sns.set(font_scale=1.5)
-rel_plot = sns.relplot(
+# Creating facet grid
+g = sns.FacetGrid(
     data=transformed_data,
-    x="pca_dim0",
-    y="pca_dim1",
     col="pdb id",
     col_wrap=3,
     hue="decoy or native",
-    facet_kws={
-        "sharey": False,
-        "sharex": False,
-    },
+    height=5,
+    aspect=1.5,
+    sharex=True,
+    sharey=True,
+)
+# Scatter plot split out by decoy or native
+g.map(
+    sns.scatterplot,
+    "pca_dim0",
+    "pca_dim1",
     s=200,
     legend=False,
 )
-rel_plot.set_axis_labels("PCA Component 1", "PCA Component 2")
-plt.savefig(
-    analysis_output + "pca_2dproj_subplots.png",
-    bbox_inches="tight",
-)
+
+# Adding elipses
+axes = g.fig.axes
+pdb_list = transformed_data["pdb id"].unique()
+count = 0
+for ax in axes:
+    pdb_id = pdb_list[count]
+    data = transformed_data.loc[
+        (transformed_data["pdb id"] == pdb_id)
+        & (transformed_data["decoy or native"] == "decoy")
+    ]
+    ax.add_artist(plot_cov_ellipses(data, nstd=1))
+    ax.add_artist(plot_cov_ellipses(data, nstd=2))
+    ax.add_artist(plot_cov_ellipses(data, nstd=3))
+    ax.set_xlabel(
+        "Principal Component 1",
+    )
+    ax.set_ylabel("Principal Component 2")
+    count = count + 1
+
+plt.savefig(analysis_output + "pca_2dproj_subplots.svg", bbox_inches="tight", dpi=600)
+plt.savefig(analysis_output + "pca_2dproj_subplots.png", bbox_inches="tight", dpi=600)
 plt.close()
 
 # Strip plot of PCA component 2 for all structures
 # split out by decoy or native structure
-sns.set(style="whitegrid")
+sns.set(style="white")
 strip_plot1 = sns.stripplot(
     x="pdb id",
     y="pca_dim1",
@@ -246,9 +379,75 @@ strip_plot2 = sns.stripplot(
 )
 strip_plot2.legend_.remove()
 plt.xlabel("PDB ID")
-plt.ylabel("PCA Component 2")
-plt.savefig(
-    analysis_output + "strip_plot.png",
-    bbox_inches="tight",
+plt.ylabel("Principal Component 2")
+plt.savefig(analysis_output + "strip_plot.svg", bbox_inches="tight", dpi=600)
+plt.savefig(analysis_output + "strip_plot.png", bbox_inches="tight", dpi=600)
+plt.close()
+
+
+fig, (ax1, ax2) = plt.subplots(2, 1)
+fig.set_size_inches(6, 8)
+
+plot = sns.scatterplot(
+    x="pca_dim0",
+    y="pca_dim1",
+    data=transformed_data,
+    hue="pdb id",
+    hue_order=[
+        "1N8V",
+        "1ZI8",
+        "2HS1",
+        "2YH5",
+        "3CHB",
+        "3D32",
+        "3MMH",
+        "3NJN",
+        "3WCQ",
+        "3WDC",
+    ],
+    style="decoy or native",
+    size="decoy or native",
+    markers=["o", "*"],
+    sizes=[50, 150],
+    ax=ax1,
 )
+ax1.set_xlabel("Principal Component 1")
+ax1.set_ylabel("Principal Component 2")
+h, l = plot.get_legend_handles_labels()
+ax1.legend(h[1:11], l[1:11], bbox_to_anchor=(1.05, 1), loc="upper left")
+
+
+# Strip plot of PCA component 2 for all structures
+# split out by decoy or native structure
+strip_plot1 = sns.stripplot(
+    x="pdb id",
+    y="pca_dim1",
+    data=transformed_data[transformed_data["decoy or native"] == "decoy"],
+    hue=decoy_or_native,
+    edgecolor="black",
+    alpha=0.7,
+    jitter=True,
+    linewidth=1,
+    marker="o",
+    s=6,
+    ax=ax2,
+)
+strip_plot1.legend_.remove()
+strip_plot2 = sns.stripplot(
+    x="pdb id",
+    y="pca_dim1",
+    data=transformed_data[transformed_data["decoy or native"] == "native"],
+    hue=decoy_or_native,
+    edgecolor="black",
+    alpha=0.7,
+    jitter=True,
+    linewidth=1,
+    marker="*",
+    s=10,
+    ax=ax2,
+)
+strip_plot2.legend_.remove()
+ax2.set_xlabel("PDB ID")
+ax2.set_ylabel("Principal Component 2")
+plt.savefig(analysis_output + "strip_plot_combined.png", bbox_inches="tight", dpi=600)
 plt.close()

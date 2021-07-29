@@ -1,11 +1,11 @@
 ,1
-rosetta - hbond_lr_bb,0.33813136375931363
-aggrescan3d: total_value,0.2817617713479675
-aggrescan3d: avg_value,0.2755678272047453
-rosetta - rama_prepro,0.2670741236402094
-rosetta - hbond_sr_bb,0.2614133170842338
-rosetta - omega,0.25918300994525467
-aggrescan3d: max_value,0.24058908175876617
-rosetta - total,0.21800583120636563
-evoef2: intraR total,0.19896717031626338
-rosetta - pro_close,0.18479098250774822
+evoef2: ref total,0.3325
+rosetta - total,0.314
+rosetta - pro_close,0.3108
+rosetta - fa_dun,0.2993
+budeff: steric,0.2895
+rosetta - p_aa_pp,0.2464
+rosetta - fa_sol,0.2358
+rosetta - rama_prepro,0.2341
+rosetta - hbond_lr_bb,0.233
+hydrophobic fitness,0.2209
