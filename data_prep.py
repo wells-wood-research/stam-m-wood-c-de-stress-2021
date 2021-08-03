@@ -46,15 +46,63 @@ for i, file_name in enumerate(file_name_list):
 # Dropping the file_name column
 combined_data.drop(["file name", "tags"], axis=1, inplace=True)
 
+# Creating a column to indicate the pdb id
+combined_data["pdb id"] = combined_data["design name"].str.split(pat="_").str[0]
+
 # Creating a column to indicate decoy or native
 combined_data["decoy or native"] = np.where(
     combined_data["design name"].str.contains("decoy"),
     "decoy",
-    np.where(combined_data["design name"].str.contains("native"), "native", ""),
+    np.where(
+        combined_data["pdb id"].isin(
+            [
+                "1ZIC",
+                "1ZIX",
+                "1ZI9",
+                "2HS2",
+                "3S53",
+                "1PZKD",
+                "1PZJD",
+                "3NJHA",
+                "3NJMA",
+                "3WDEA",
+                "3WDDA",
+                "1N8UA",
+            ]
+        ),
+        "extra native",
+        np.where(combined_data["design name"].str.contains("native"), "native", ""),
+    ),
 )
 
-# Creating a column to indicate the pdb id
-combined_data["pdb id"] = combined_data["design name"].str.split(pat="_").str[0]
+
+# Creating a column to indicate structure group
+combined_data["structure group"] = np.where(
+    combined_data["pdb id"].isin(["1ZIC", "1ZIX", "1ZI9"]),
+    "1ZI8A",
+    np.where(
+        combined_data["pdb id"].isin(["2HS2", "3S53"]),
+        "2HS1A",
+        np.where(
+            combined_data["pdb id"].isin(["1PZKD", "1PZJD"]),
+            "3CHBD",
+            np.where(
+                combined_data["pdb id"].isin(["3NJHA", "3NJMA"]),
+                "3NJN",
+                np.where(
+                    combined_data["pdb id"].isin(["3WDEA", "3WDDA"]),
+                    "3WDC",
+                    np.where(
+                        combined_data["pdb id"].isin(["1N8UA"]),
+                        "1N8V",
+                        combined_data["design name"].str.split(pat="_").str[0],
+                    ),
+                ),
+            ),
+        ),
+    ),
+)
+
 
 # 3. Saving data--------------------------------------------------------------
 

@@ -12,6 +12,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn import decomposition
 from scipy.stats import multivariate_normal
 from helper_functions import *
+from scipy import stats
 
 
 # 1. Reading in the data and preprocessing-----------------------------------
@@ -26,6 +27,8 @@ combined_data = pd.read_csv(destress_output + "combined_data.csv")
 # Extracting the labels
 decoy_or_native = combined_data["decoy or native"]
 pdb_id = combined_data["pdb id"].str.slice(start=0, stop=4)
+structure_group = combined_data["structure group"].str.slice(start=0, stop=4)
+# extra_native_flag = combined_data["extra native flag"]
 
 # Dividing energy values by number of residues
 combined_data.loc[
@@ -113,6 +116,8 @@ combined_data.drop(
         "aggrescan3d: total_value",
         "isoelectric point (pH)",
         "pdb id",
+        "structure group",
+        # "extra native flag",
     ],
     axis=1,
     inplace=True,
@@ -128,14 +133,15 @@ combined_data = combined_data.loc[
     :, ~combined_data.columns.str.startswith("composition")
 ]
 
+# Saving a list of the features used
+print(combined_data.columns)
+
 
 # 2. Histograms of the features------------------------------------------------------------------------
-
 combined_data["rosetta - pro_close"].plot.hist(
     grid=True, bins=50, rwidth=0.9, color="#87ceeb"
 )
 plt.title("Histogram of the rosetta - pro_close metric values")
-# plt.xlabel("dfire2 - total")
 plt.xlabel("rosetta - pro_close")
 plt.ylabel("counts")
 plt.savefig(
@@ -234,6 +240,18 @@ plt.close()
 scaled_data = MinMaxScaler(feature_range=(0, 1)).fit_transform(combined_data)
 scaled_data_df = pd.DataFrame(scaled_data, columns=combined_data.columns)
 
+# Checking normality of the features
+for col in scaled_data_df.columns:
+    scaled_data_df[col].plot.hist(grid=True, bins=50, rwidth=0.9, color="#87ceeb")
+    plt.title(col)
+    plt.xlabel("col")
+    plt.ylabel("counts")
+    plt.savefig(
+        analysis_output + "hist_transf_" + col + ".png",
+        bbox_inches="tight",
+    )
+    plt.close()
+
 # Outputting the pandas data frame as a csv file
 scaled_data_df.to_csv(analysis_output + "scaled_data.csv", index=False)
 
@@ -264,10 +282,12 @@ transformed_data = pd.DataFrame(transformed_data).rename(
 )
 
 # Adding the labels back
-transformed_data = pd.concat([transformed_data, decoy_or_native, pdb_id], axis=1)
+transformed_data = pd.concat(
+    [transformed_data, decoy_or_native, pdb_id, structure_group],
+    axis=1,
+)
 
 # 5. Fitting 2d Gaussians to each of the sets of decoy structures by pdb id----------------------------
-
 
 # 6. Various different plots for paper and report---------------------------------------
 
@@ -276,7 +296,7 @@ plot = sns.scatterplot(
     x="pca_dim0",
     y="pca_dim1",
     data=transformed_data,
-    hue="pdb id",
+    hue="structure group",
     hue_order=[
         "1N8V",
         "1ZI8",
@@ -291,8 +311,10 @@ plot = sns.scatterplot(
     ],
     style="decoy or native",
     size="decoy or native",
-    markers=["o", "*"],
-    sizes=[50, 150],
+    markers=["o", "*", "s"],
+    alpha=0.6,
+    edgecolor="black",
+    sizes=[50, 150, 50],
 )
 plt.xlabel("Principal Component 1")
 plt.ylabel("Principal Component 2")
@@ -303,13 +325,12 @@ plt.savefig(analysis_output + "pca_2dproj.svg", bbox_inches="tight", dpi=600)
 plt.close()
 
 
-# Individual scatter plots for each structure with
-# 2d Gaussian standard deviation elipses
+# Individual scatter plots for each structure
 sns.set(font_scale=1.5)
 # Creating facet grid
 g = sns.FacetGrid(
     data=transformed_data,
-    col="pdb id",
+    col="structure group",
     col_wrap=3,
     hue="decoy or native",
     height=5,
@@ -326,24 +347,13 @@ g.map(
     legend=False,
 )
 
-# Adding elipses
+# Adding labels
 axes = g.fig.axes
-pdb_list = transformed_data["pdb id"].unique()
-count = 0
 for ax in axes:
-    pdb_id = pdb_list[count]
-    data = transformed_data.loc[
-        (transformed_data["pdb id"] == pdb_id)
-        & (transformed_data["decoy or native"] == "decoy")
-    ]
-    ax.add_artist(plot_cov_ellipses(data, nstd=1))
-    ax.add_artist(plot_cov_ellipses(data, nstd=2))
-    ax.add_artist(plot_cov_ellipses(data, nstd=3))
     ax.set_xlabel(
         "Principal Component 1",
     )
     ax.set_ylabel("Principal Component 2")
-    count = count + 1
 
 plt.savefig(analysis_output + "pca_2dproj_subplots.svg", bbox_inches="tight", dpi=600)
 plt.savefig(analysis_output + "pca_2dproj_subplots.png", bbox_inches="tight", dpi=600)
@@ -353,7 +363,7 @@ plt.close()
 # split out by decoy or native structure
 sns.set(style="white")
 strip_plot1 = sns.stripplot(
-    x="pdb id",
+    x="structure group",
     y="pca_dim1",
     data=transformed_data[transformed_data["decoy or native"] == "decoy"],
     hue=decoy_or_native,
@@ -366,7 +376,7 @@ strip_plot1 = sns.stripplot(
 )
 strip_plot1.legend_.remove()
 strip_plot2 = sns.stripplot(
-    x="pdb id",
+    x="structure group",
     y="pca_dim1",
     data=transformed_data[transformed_data["decoy or native"] == "native"],
     hue=decoy_or_native,
@@ -392,7 +402,7 @@ plot = sns.scatterplot(
     x="pca_dim0",
     y="pca_dim1",
     data=transformed_data,
-    hue="pdb id",
+    hue="structure group",
     hue_order=[
         "1N8V",
         "1ZI8",
@@ -407,8 +417,10 @@ plot = sns.scatterplot(
     ],
     style="decoy or native",
     size="decoy or native",
-    markers=["o", "*"],
-    sizes=[50, 150],
+    markers=["o", "*", "s"],
+    alpha=0.7,
+    edgecolor="black",
+    sizes=[50, 150, 50],
     ax=ax1,
 )
 ax1.set_xlabel("Principal Component 1")
@@ -420,7 +432,7 @@ ax1.legend(h[1:11], l[1:11], bbox_to_anchor=(1.05, 1), loc="upper left")
 # Strip plot of PCA component 2 for all structures
 # split out by decoy or native structure
 strip_plot1 = sns.stripplot(
-    x="pdb id",
+    x="structure group",
     y="pca_dim1",
     data=transformed_data[transformed_data["decoy or native"] == "decoy"],
     hue=decoy_or_native,
@@ -434,7 +446,7 @@ strip_plot1 = sns.stripplot(
 )
 strip_plot1.legend_.remove()
 strip_plot2 = sns.stripplot(
-    x="pdb id",
+    x="structure group",
     y="pca_dim1",
     data=transformed_data[transformed_data["decoy or native"] == "native"],
     hue=decoy_or_native,
