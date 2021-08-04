@@ -1,11 +1,11 @@
 ,1
-evoef2: ref total,0.3135
-rosetta - total,0.3108
-budeff: steric,0.2921
-rosetta - pro_close,0.2912
-rosetta - hbond_lr_bb,0.2642
-rosetta - fa_sol,0.2529
-rosetta - fa_dun,0.2511
-rosetta - p_aa_pp,0.2438
-rosetta - rama_prepro,0.2192
-evoef2: interS total,0.206
+rosetta - total,0.3431
+rosetta - pro_close,0.3343
+budeff: steric,0.2929
+rosetta - fa_dun,0.2835
+rosetta - hbond_lr_bb,0.2697
+rosetta - fa_sol,0.2404
+rosetta - p_aa_pp,0.2144
+rosetta - fa_atr,0.1956
+hydrophobic fitness,0.1954
+rosetta - rama_prepro,0.1948

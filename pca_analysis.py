@@ -117,7 +117,8 @@ combined_data.drop(
         "isoelectric point (pH)",
         "pdb id",
         "structure group",
-        # "extra native flag",
+        "evoef2: ref total",
+        "rosetta - dslf_fa13",
     ],
     axis=1,
     inplace=True,
@@ -319,7 +320,14 @@ plot = sns.scatterplot(
 plt.xlabel("Principal Component 1")
 plt.ylabel("Principal Component 2")
 h, l = plot.get_legend_handles_labels()
-plt.legend(h[1:11], l[1:11], bbox_to_anchor=(1.05, 1), loc="upper left")
+h[0] = "PDB ID"
+plt.legend(
+    # h[0:11],
+    # l[0:11],
+    bbox_to_anchor=(1.05, 1),
+    loc="upper left",
+)
+# plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
 plt.savefig(analysis_output + "pca_2dproj.png", bbox_inches="tight", dpi=600)
 plt.savefig(analysis_output + "pca_2dproj.svg", bbox_inches="tight", dpi=600)
 plt.close()
