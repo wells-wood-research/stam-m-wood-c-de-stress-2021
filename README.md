@@ -111,7 +111,7 @@ experimentally-determined structures out themselves. Two other metrics `evoef2: 
 was excluded as we already have `aggrescan3d: avg_value` in the data set which is normalised for 
 the size of the structure. The two sections below show the full list of included and excluded metrics.
 
-####Included Metrics
+Included Metrics
 
     'hydrophobic fitness', 'packing density', 'budeff: total',
     'budeff: steric', 'budeff: desolvation', 'budeff: charge',
@@ -124,7 +124,7 @@ the size of the structure. The two sections below show the full list of included
     'rosetta - fa_dun', 'rosetta - omega', 'rosetta - pro_close',
     'aggrescan3d: avg_value', 'aggrescan3d: min_value', 'aggrescan3d: max_value'
 
-####Excluded Metrics
+Excluded Metrics
 
         "design name", "number of residues", "mass (da)",
         "decoy or native", "evoef2 - interD total", "rosetta - yhh_planarity",
