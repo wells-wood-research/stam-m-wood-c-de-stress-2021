@@ -126,17 +126,17 @@ Included Metrics
 
 Excluded Metrics
 
-    "design name", "number of residues", "mass (da)",
-    "decoy or native", "evoef2 - interD total", "rosetta - yhh_planarity",
-    "aggrescan3d: total_value", "isoelectric point (pH)",
-    "pdb id", "structure group", "evoef2: ref total",
-    "rosetta - dslf_fa13", "composition: ALA", "composition: CYS",
-    "composition: ASP",	"composition: GLU",	"composition: PHE",
-    "composition: GLY",	"composition: HIS",	"composition: ILE",
-    "composition: LYS",	"composition: LEU",	"composition: MET",	
-    "composition: ASN",	"composition: PRO",	"composition: GLN",
-    "composition: ARG",	"composition: SER",	"composition: THR",
-    "composition: VAL",	"composition: TRP",	"composition: UNK"
+    'design name', 'number of residues', 'mass (da)',
+    'decoy or native', 'evoef2 - interD total', 'rosetta - yhh_planarity',
+    'aggrescan3d: total_value', 'isoelectric point (pH)',
+    'pdb id', 'structure group', 'evoef2: ref total',
+    'rosetta - dslf_fa13', 'composition: ALA', 'composition: CYS',
+    'composition: ASP',	'composition: GLU',	'composition: PHE',
+    'composition: GLY',	'composition: HIS',	'composition: ILE',
+    'composition: LYS',	'composition: LEU',	'composition: MET',	
+    'composition: ASN',	'composition: PRO',	'composition: GLN',
+    'composition: ARG',	'composition: SER',	'composition: THR',
+    'composition: VAL',	'composition: TRP',	'composition: UNK'
 
 
 
