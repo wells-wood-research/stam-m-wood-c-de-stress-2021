@@ -167,17 +167,17 @@ From this plot, we see that for each `pdb id`, the experimentally determined str
 stars, consistently have the maximum values for principal components 1 and 2. It is clear from this
 plot that they are distinct from the decoy structures shown as circles. In addition to this, the
 other crystallographic structures, shown as squares, are close to the experimentally determined structures from the 
-3DRobot_set,which shows that this analysis is robust to small variations in the experimentally 
+3DRobot_set, which shows that this analysis is robust to small variations in the experimentally 
 determined structure.
 
 This can also be seen by plotting all of the structures on one chart. There is a clear cluster
-of experimentally determined structures, shown as stars, and their other cyrstallographic 
+of experimentally determined structures, shown as stars, and their other crystallographic 
 structures, shown as squares, in the top right section of the chart. A dotted line has been 
 added to the plot to show that the classes of "native" structures and "decoy structures are 
 linearly separable. This means that it would be trivial to train a classifier to predict "native"
 vs "decoy" for these structures. 
 
-[<img src=./analysis/pca_2dproj.png>]()
+[<img src=./analysis/pca_2dproj_dottedline.png>]()
 
 Furthermore, we investigated what features contributed to both principal components. The table 
 below shows the top 6 contributer to principal component 1 and 2.
