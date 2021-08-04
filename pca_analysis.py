@@ -248,7 +248,7 @@ for col in scaled_data_df.columns:
     plt.xlabel("col")
     plt.ylabel("counts")
     plt.savefig(
-        analysis_output + "hist_transf_" + col + ".png",
+        analysis_output + "hist_transf_" + col.replace(" ", "") + ".png",
         bbox_inches="tight",
     )
     plt.close()
@@ -320,14 +320,31 @@ plot = sns.scatterplot(
 plt.xlabel("Principal Component 1")
 plt.ylabel("Principal Component 2")
 h, l = plot.get_legend_handles_labels()
-h[0] = "PDB ID"
 plt.legend(
-    # h[0:11],
-    # l[0:11],
+    h[1:11],
+    l[1:11],
     bbox_to_anchor=(1.05, 1),
     loc="upper left",
+    title="PDB ID",
 )
-# plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
+plot.add_artist(
+    plt.legend(
+        h[12:15],
+        l[12:15],
+        bbox_to_anchor=(1.05, 0.3),
+        # loc="upper left",
+        title="Decoy or Native",
+    )
+)
+plot.add_artist(
+    plt.legend(
+        h[1:11],
+        l[1:11],
+        bbox_to_anchor=(1.08, 1),
+        loc="upper left",
+        title="PDB ID",
+    )
+)
 plt.savefig(analysis_output + "pca_2dproj.png", bbox_inches="tight", dpi=600)
 plt.savefig(analysis_output + "pca_2dproj.svg", bbox_inches="tight", dpi=600)
 plt.close()
@@ -335,36 +352,37 @@ plt.close()
 
 # Individual scatter plots for each structure
 sns.set(font_scale=1.5)
-# Creating facet grid
-g = sns.FacetGrid(
+rel_plot = sns.relplot(
     data=transformed_data,
+    x="pca_dim0",
+    y="pca_dim1",
     col="structure group",
     col_wrap=3,
     hue="decoy or native",
-    height=5,
-    aspect=1.5,
-    sharex=True,
-    sharey=True,
-)
-# Scatter plot split out by decoy or native
-g.map(
-    sns.scatterplot,
-    "pca_dim0",
-    "pca_dim1",
+    facet_kws={
+        "sharey": False,
+        "sharex": False,
+    },
     s=200,
     legend=False,
+    style="decoy or native",
+    size="decoy or native",
+    markers=["o", "*", "s"],
+    alpha=0.6,
+    edgecolor="black",
+    sizes=[300, 450, 300],
 )
-
-# Adding labels
-axes = g.fig.axes
-for ax in axes:
-    ax.set_xlabel(
-        "Principal Component 1",
-    )
-    ax.set_ylabel("Principal Component 2")
-
-plt.savefig(analysis_output + "pca_2dproj_subplots.svg", bbox_inches="tight", dpi=600)
-plt.savefig(analysis_output + "pca_2dproj_subplots.png", bbox_inches="tight", dpi=600)
+rel_plot.set_axis_labels("PCA Component 1", "PCA Component 2")
+plt.savefig(
+    analysis_output + "pca_2dproj_subplots.png",
+    bbox_inches="tight",
+    dpi=600,
+)
+plt.savefig(
+    analysis_output + "pca_2dproj_subplots.svg",
+    bbox_inches="tight",
+    dpi=600,
+)
 plt.close()
 
 # Strip plot of PCA component 2 for all structures
