@@ -130,7 +130,14 @@ the size of the structure. The two sections below show the full list of included
         "decoy or native", "evoef2 - interD total", "rosetta - yhh_planarity",
         "aggrescan3d: total_value", "isoelectric point (pH)",
         "pdb id", "structure group", "evoef2: ref total",
-        "rosetta - dslf_fa13",
+        "rosetta - dslf_fa13", "composition: ALA", "composition: CYS",
+        "composition: ASP",	"composition: GLU",	"composition: PHE",
+        "composition: GLY",	"composition: HIS",	"composition: ILE",
+        "composition: LYS",	"composition: LEU",	"composition: MET",	
+        "composition: ASN",	"composition: PRO",	"composition: GLN",
+        "composition: ARG",	"composition: SER",	"composition: THR",
+        "composition: VAL",	"composition: TRP",	"composition: UNK"
+
 
 
 After excluding these metrics, the remaining features were scaled so that the values were 
@@ -140,7 +147,7 @@ We chose to scale the features with min-max scaling rather than using standardis
 as some of the features didn't appear to have a Gaussian distribution. 
 An example of this is shown in the plot below.
 
-[<img src=./analysis/hist_transf_rosetta - hbond_sc.png>]()
+[<img src=./analysis/hist_transf_rosetta-hbond_sc.png>]()
 
 ### Performing PCA
 
@@ -172,19 +179,37 @@ vs "decoy" for these structures.
 
 [<img src=./analysis/pca_2dproj.png>]()
 
-Furthermore, we investigated what features contributed to principal component 2 and the top 10 features, ordered
-by relative contribution are shown below. 
+Furthermore, we investigated what features contributed to both principal components. The table 
+below shows the top 6 contributer to principal component 1 and 2.
 
-1. `rosetta - hbond_lr_bb`
-2. `aggrescan3d: total_value`
-3. `aggrescan3d: avg_value`
-4. `rosetta - rama_prepro`
-5. `rosetta - hbond_sr_bb`
-6. `rosetta - omega`
-7. `aggrescan3d: max_value`
-8. `rosetta - total`
-9. `evoef2: intraR total`
-10. `rosetta - pro_close`.
+| Top 6 contributers to PC1  |  Top 6 contributers to PC2 | 
+|---|---|
+| budeff: total | rosetta - total |
+| rosetta - hbond_sr_bb | rosetta - pro_close |
+| rosetta - hbond_lr_bb | budeff: steric |
+| evoef2: intraR total | rosetta - fa_dun  |
+| dfire2 - total | rosetta - hbond_lr_bb |
+| budeff: charge | rosetta - fa_sol |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
