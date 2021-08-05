@@ -29,17 +29,18 @@ num_decoys = 40
 
 # 2. Creating the subset data----------------------------------------------------
 
-# Firstly making the folder data_3drobot_subset if it does not exist
-pathlib.Path(data_3drobot_subset).mkdir(parents=True, exist_ok=True)
-
-# Listing all the sub dirs (structures) in the 3DRobot Decoy Data
-subdirs = [x[0] for x in os.walk(data_3drobot_set)]
-
-# Removing "data/3DRobot_set/" from this list
-subdirs[:] = [d for d in subdirs if d not in ["data/3DRobot_set/"]]
-
-# Sampling a subset of these structures
-subdirs_subset = sample(subdirs, num_structures)
+# Defining the subset of data
+subdirs_subset = [
+    "data/3DRobot_set/1N8VA",
+    "data/3DRobot_set/1ZI8A",
+    "data/3DRobot_set/2HS1A",
+    "data/3DRobot_set/3CHBD",
+    "data/3DRobot_set/3NJNA",
+    "data/3DRobot_set/3WCQA",
+    "data/3DRobot_set/3WDCA",
+    "data/3DRobot_set/3LDCA",
+    "data/3DRobot_set/2XODA",
+]
 
 # Printing how many structures the script will run for
 print(

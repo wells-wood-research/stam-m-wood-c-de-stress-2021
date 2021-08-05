@@ -68,9 +68,14 @@ combined_data["decoy or native"] = np.where(
                 "3WDEA",
                 "3WDDA",
                 "1N8UA",
+                "3AB5A",
+                "2X2P",
+                "3OUS",
+                "3R65",
+                "3LDD",
             ]
         ),
-        "extra native",
+        "additional native",
         np.where(combined_data["design name"].str.contains("native"), "native", ""),
     ),
 )
@@ -95,7 +100,23 @@ combined_data["structure group"] = np.where(
                     np.where(
                         combined_data["pdb id"].isin(["1N8UA"]),
                         "1N8V",
-                        combined_data["design name"].str.split(pat="_").str[0],
+                        np.where(
+                            combined_data["pdb id"].isin(["3AB5A"]),
+                            "3WCQA",
+                            np.where(
+                                combined_data["pdb id"].isin(["2X2P"]),
+                                "2XODA",
+                                np.where(
+                                    combined_data["pdb id"].isin(
+                                        ["3OUS", "3R65", "3LDD"]
+                                    ),
+                                    "3LDCA",
+                                    combined_data["design name"]
+                                    .str.split(pat="_")
+                                    .str[0],
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             ),

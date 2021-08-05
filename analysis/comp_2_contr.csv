@@ -1,11 +1,11 @@
 ,1
-rosetta - total,0.3431
-rosetta - pro_close,0.3343
-budeff: steric,0.2929
-rosetta - fa_dun,0.2835
-rosetta - hbond_lr_bb,0.2697
-rosetta - fa_sol,0.2404
-rosetta - p_aa_pp,0.2144
-rosetta - fa_atr,0.1956
-hydrophobic fitness,0.1954
-rosetta - rama_prepro,0.1948
+aggrescan3d: avg_value,0.3252
+budeff: steric,0.316
+rosetta - fa_intra_sol_xover4,0.3143
+aggrescan3d: max_value,0.3081
+aggrescan3d: min_value,0.2811
+packing density,0.2508
+rosetta - fa_rep,0.2462
+budeff: desolvation,0.2323
+rosetta - fa_atr,0.2302
+rosetta - fa_dun,0.2295

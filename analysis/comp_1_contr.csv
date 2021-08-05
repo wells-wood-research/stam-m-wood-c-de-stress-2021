@@ -1,11 +1,11 @@
 ,0
-budeff: total,0.3107
-rosetta - hbond_sr_bb,0.294
-rosetta - hbond_lr_bb,0.2598
-evoef2: intraR total,0.252
-dfire2 - total,0.2484
-budeff: charge,0.2467
-rosetta - rama_prepro,0.2233
-evoef2: total,0.218
-rosetta - fa_atr,0.2111
-rosetta - omega,0.2031
+rosetta - hbond_sr_bb,0.3376
+rosetta - hbond_lr_bb,0.3311
+budeff: total,0.3161
+evoef2: intraR total,0.2942
+budeff: charge,0.2538
+dfire2 - total,0.2507
+rosetta - omega,0.2242
+rosetta - rama_prepro,0.2202
+evoef2: total,0.2198
+rosetta - lk_ball_wtd,0.2018

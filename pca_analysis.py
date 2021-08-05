@@ -302,35 +302,34 @@ plot = sns.scatterplot(
         "1N8V",
         "1ZI8",
         "2HS1",
-        "2YH5",
+        "2XOD",
         "3CHB",
-        "3D32",
-        "3MMH",
+        "3LDC",
         "3NJN",
         "3WCQ",
         "3WDC",
     ],
     style="decoy or native",
     size="decoy or native",
-    markers=["o", "*", "s"],
+    markers=["o", "s", "*"],
     alpha=0.6,
     edgecolor="black",
-    sizes=[50, 150, 50],
+    sizes=[50, 50, 150],
 )
 plt.xlabel("Principal Component 1")
 plt.ylabel("Principal Component 2")
 h, l = plot.get_legend_handles_labels()
 plt.legend(
-    h[1:11],
-    l[1:11],
+    h[1:10],
+    l[1:10],
     bbox_to_anchor=(1.05, 1),
     loc="upper left",
     title="PDB ID",
 )
 plot.add_artist(
     plt.legend(
-        h[12:15],
-        l[12:15],
+        h[11:15],
+        l[11:15],
         bbox_to_anchor=(1.05, 0.3),
         # loc="upper left",
         title="Decoy or Native",
@@ -338,8 +337,8 @@ plot.add_artist(
 )
 plot.add_artist(
     plt.legend(
-        h[1:11],
-        l[1:11],
+        h[1:10],
+        l[1:10],
         bbox_to_anchor=(1.08, 1),
         loc="upper left",
         title="PDB ID",
@@ -367,10 +366,10 @@ rel_plot = sns.relplot(
     legend=False,
     style="decoy or native",
     size="decoy or native",
-    markers=["o", "*", "s"],
+    markers=["o", "s", "*"],
     alpha=0.6,
     edgecolor="black",
-    sizes=[300, 450, 300],
+    sizes=[300, 300, 450],
 )
 rel_plot.set_axis_labels("PCA Component 1", "PCA Component 2")
 plt.savefig(
@@ -433,26 +432,25 @@ plot = sns.scatterplot(
         "1N8V",
         "1ZI8",
         "2HS1",
-        "2YH5",
+        "2XOD",
         "3CHB",
-        "3D32",
-        "3MMH",
+        "3LDC",
         "3NJN",
         "3WCQ",
         "3WDC",
     ],
     style="decoy or native",
     size="decoy or native",
-    markers=["o", "*", "s"],
+    markers=["o", "s", "*"],
     alpha=0.7,
     edgecolor="black",
-    sizes=[50, 150, 50],
+    sizes=[50, 50, 150],
     ax=ax1,
 )
 ax1.set_xlabel("Principal Component 1")
 ax1.set_ylabel("Principal Component 2")
 h, l = plot.get_legend_handles_labels()
-ax1.legend(h[1:11], l[1:11], bbox_to_anchor=(1.05, 1), loc="upper left")
+ax1.legend(h[1:10], l[1:10], bbox_to_anchor=(1.05, 1), loc="upper left")
 
 
 # Strip plot of PCA component 2 for all structures
