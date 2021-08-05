@@ -148,7 +148,7 @@ roughly 90% of the variance is explained with 8 principal components.
 [<img src=./analysis/var_explained.png>]()
 
 After this, we plotted the first two principal components for all 9 of the 
-experimentally-determined structures, along with their decoys and the other 
+experimentally-determined structures, along with their decoys and the additional 
 crystallographic structures.
 
 [<img src=./analysis/pca_2dproj_subplots.png>]()
